@@ -374,17 +374,17 @@
                         </div>
                         <div class="col-lg-12">
                             <fieldset>
-                                <input type="text" name="name" id="name" placeholder="Your Name" autocomplete="on" required>
+                                <input type="text" name="name" id="name" placeholder="Your Name" autocomplete="on" >
                             </fieldset>
                         </div>
                         <div class="col-lg-12">
                             <fieldset>
-                                <input type="email" name="email" id="email" pattern="[^ @]*@[^ @]*" placeholder="Your Email" required>
+                                <input type="email" name="email" id="email" pattern="[^ @]*@[^ @]*" placeholder="Your Email" >
                             </fieldset>
                         </div>
                         <div class="col-lg-12">
                             <fieldset>
-                                <input type="tel" name="phone" id="phone" placeholder="Your Phone" required>
+                                <input type="tel" name="phone" id="phone" placeholder="Your Phone" >
                             </fieldset>
                         </div>
                         <div class="col-lg-12">
@@ -394,7 +394,7 @@
                         </div>
                         <div class="col-lg-12">
                             <fieldset>
-                                <textarea name="message" id="message" placeholder="Your Message" required></textarea>
+                                <textarea name="message" id="message" placeholder="Your Message"></textarea>
                             </fieldset>
                         </div>
                         <div class="col-lg-12">
@@ -502,22 +502,68 @@
         console.log("Données envoyées :", JSON.stringify(formData, null, 2));
 
         // Envoi des données via Fetch API
-        fetch("https://connect.pabbly.com/workflow/sendwebhookdata/IjU3NjYwNTZkMDYzZTA0MzY1MjZjNTUzNDUxMzUi_pc", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify(formData)
-        })
-            .then(response => response.json())
-            .then(data => {
-                console.log("Success:", data);
-                alert("Message envoyé avec succès !");
+        // fetch("https://connect.pabbly.com/workflow/sendwebhookdata/IjU3NjYwNTZkMDYzZTA0MzY1MjZjNTUzNDUxMzUi_pc", {
+        //     method: "POST",
+        //     headers: {
+        //         "Content-Type": "application/json"
+        //     },
+        //     body: JSON.stringify(formData)
+        // })
+        //     .then(response => response.json())
+        //     .then(data => {
+        //         console.log("Success:", data);
+        //         alert("Message envoyé avec succès !");
+        //         // Réinitialiser le formulaire après l'envoi réussi
+        //         document.getElementById("contact").reset();
+        //     })
+        //     .catch((error) => {
+        //         console.error("Error:", error);
+        //         alert("Une erreur s'est produite lors de l'envoi.", );
+        //     });
+
+
+        // Vérifier si les champs obligatoires sont remplis
+        if (!name || !email || !message) {
+            // Envoi des données partielles à une feuille Google Sheets séparée (Incomplete Form Submission)
+            fetch("https://connect.pabbly.com/workflow/sendwebhookdata/IjU3NjYwNTZkMDYzZTA0MzY1MjZjNTUzYzUxMzUi_pc", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(formData) // Envoie tous les champs, même vides
             })
-            .catch((error) => {
-                console.error("Error:", error);
-                alert("Une erreur s'est produite lors de l'envoi.", );
-            });
+                .then(response => response.json())
+                .then(data => {
+                    console.log("Données partielles envoyées :", data);
+                    alert("Formulaire incomplet, données enregistrées.");
+                })
+                .catch((error) => {
+                    console.error("Erreur lors de l'envoi des données partielles :", error);
+                });
+        } else {
+            // Envoi des données complètes à la feuille Google Sheets principale (Form Submission to Google Sheets)
+            fetch("https://connect.pabbly.com/workflow/sendwebhookdata/IjU3NjYwNTZkMDYzZTA0MzY1MjZjNTUzNDUxMzUi_pc", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(formData)
+            })
+                .then(response => response.json())
+                .then(data => {
+                    console.log("Success:", data);
+                    alert("Message envoyé avec succès !");
+                    // Réinitialiser le formulaire après l'envoi réussi
+                    document.getElementById("contact").reset();
+                    // Effacer les données stockées dans localStorage après soumission réussie
+
+                })
+                .catch((error) => {
+                    console.error("Error:", error);
+                    alert("Une erreur s'est produite lors de l'envoi.");
+                });
+        }
+
     });
 
 </script>
