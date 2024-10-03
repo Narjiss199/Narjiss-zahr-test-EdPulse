@@ -499,6 +499,7 @@
             study_level: studyLevel,
             message: message
         };
+        console.log("Données envoyées :", JSON.stringify(formData, null, 2));
 
         // Envoi des données via Fetch API
         fetch("https://connect.pabbly.com/workflow/sendwebhookdata/IjU3NjYwNTZkMDYzZTA0MzY1MjZjNTUzNDUxMzUi_pc", {
