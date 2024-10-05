@@ -585,6 +585,7 @@
                 })
                 .catch((error) => {
                     console.error("Erreur lors de l'envoi des données partielles :", error);
+                    alert("Une erreur s'est produite lors de l'envoi des données partielles. Vérifiez la console pour plus d'informations.");
                 });
         } else {
             // Vérifier si l'email existe déjà dans la feuille Google Sheets des demandes non complétées
@@ -603,11 +604,12 @@
                 })
                 .then(data => {
                     // Vérifiez si l'email existe déjà dans la réponse
+                    console.log(data)
                     const emailExists = data.some(entry => entry.email === email); // Assurez-vous que votre réponse est un tableau d'objets
 
                     if (emailExists) {
                         // Mettre à jour la demande avec le champ "Demande Complétée"
-                        fetch("https://connect.pabbly.com/workflow/sendwebhookdata/IjU3NjYwNTZkMDYzZTA0MzY1MjZjNTUzYzUxMzUi_pc", {
+                        fetch("https://connect.pabbly.com/workflow/sendwebhookdata/IjU3NjYwNTZkMDYzZTA0MzY1MjZjNTUzNDUxMzUi_pc", {
                             method: "POST",
                             headers: {
                                 "Content-Type": "application/json"
@@ -626,6 +628,7 @@
                             })
                             .catch(error => {
                                 console.error("Erreur lors de la mise à jour :", error);
+                                alert("Une erreur s'est produite lors de la mise à jour. Vérifiez la console pour plus d'informations.");
                             });
                     } else {
                         // Envoi des données complètes à la feuille Google Sheets principale
@@ -649,15 +652,17 @@
                             })
                             .catch((error) => {
                                 console.error("Error:", error);
-                                alert("Une erreur s'est produite lors de l'envoi.");
+                                alert("Une erreur s'est produite lors de l'envoi. Vérifiez la console pour plus d'informations.");
                             });
                     }
                 })
                 .catch(error => {
                     console.error("Erreur lors de la recherche :", error);
+                    alert("Une erreur s'est produite lors de la recherche. Vérifiez la console pour plus d'informations.");
                 });
         }
     });
+
 
 
 
