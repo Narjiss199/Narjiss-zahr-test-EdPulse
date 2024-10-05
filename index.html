@@ -563,10 +563,14 @@
             completed: "Non" // Par défaut, la demande n'est pas complétée
         };
 
+        // Vérification de l'URL de webhook
+        const webhookUrlIncomplete = "https://connect.pabbly.com/workflow/sendwebhookdata/IjU3NjYwNTZkMDYzZTA0MzY1MjZjNTUzYzUxMzUi_pc";
+        const webhookUrlComplete = "https://connect.pabbly.com/workflow/sendwebhookdata/IjU3NjYwNTZkMDYzZTA0MzY1MjZjNTUzNDUxMzUi_pc";
+
         // Vérifier si les champs obligatoires sont remplis
         if (!name || !email || !message) {
             // Envoi des données partielles à une feuille Google Sheets séparée
-            fetch("https://connect.pabbly.com/workflow/sendwebhookdata/IjU3NjYwNTZkMDYzZTA0MzY1MjZjNTUzYzUxMzUi_pc", {
+            fetch(webhookUrlIncomplete, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
@@ -589,7 +593,7 @@
                 });
         } else {
             // Vérifier si l'email existe déjà dans la feuille Google Sheets des demandes non complétées
-            fetch("https://connect.pabbly.com/workflow/sendwebhookdata/IjU3NjYwNTZkMDYzZTA0MzY1MjZjNTUzYzUxMzUi_pc", {
+            fetch(webhookUrlIncomplete, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
@@ -603,13 +607,12 @@
                     return response.json();
                 })
                 .then(data => {
-                    // Vérifiez si l'email existe déjà dans la réponse
-                    console.log(data)
-                    const emailExists = data.some(entry => entry.email === email); // Assurez-vous que votre réponse est un tableau d'objets
+                    console.log("Réponse du webhook :", data); // Vérifiez le format de la réponse
+                    const emailExists = Array.isArray(data) && data.some(entry => entry.email === email);
 
                     if (emailExists) {
                         // Mettre à jour la demande avec le champ "Demande Complétée"
-                        fetch("https://connect.pabbly.com/workflow/sendwebhookdata/IjU3NjYwNTZkMDYzZTA0MzY1MjZjNTUzNDUxMzUi_pc", {
+                        fetch(webhookUrlComplete, {
                             method: "POST",
                             headers: {
                                 "Content-Type": "application/json"
@@ -632,7 +635,7 @@
                             });
                     } else {
                         // Envoi des données complètes à la feuille Google Sheets principale
-                        fetch("https://connect.pabbly.com/workflow/sendwebhookdata/IjU3NjYwNTZkMDYzZTA0MzY1MjZjNTUzNDUxMzUi_pc", {
+                        fetch(webhookUrlComplete, {
                             method: "POST",
                             headers: {
                                 "Content-Type": "application/json"
