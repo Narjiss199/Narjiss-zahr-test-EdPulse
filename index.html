@@ -414,7 +414,7 @@
                 </ul>
             </div>
             <div class="col-lg-12">
-                <p class="copyright"> Narjiss ZAHR - TEST EdPulse 03/10/24 .</p>
+                <p class="copyright"> Narjiss ZAHR - TEST EdPulse 05/10/24 .</p>
             </div>
         </div>
     </div>
@@ -443,7 +443,6 @@
             direction = section.replace(/#/, ''),
             reqSection = $('.section').filter('[data-section="' + direction + '"]'),
             reqSectionPos = reqSection.offset().top - 0;
-
         if (isAnimate) {
             $('body, html').animate({
                     scrollTop: reqSectionPos
@@ -452,7 +451,6 @@
         } else {
             $('body, html').scrollTop(reqSectionPos);
         }
-
     };
 
     var checkSection = function checkSection() {
@@ -480,6 +478,71 @@
         checkSection();
     });
 
+    // document.getElementById("contact").addEventListener("submit", function(event) {
+    //     event.preventDefault(); // Empêche l'envoi du formulaire
+    //
+    //     // Récupération des données du formulaire
+    //     let name = document.getElementById("name").value;
+    //     let email = document.getElementById("email").value;
+    //     let phone = document.getElementById("phone").value;
+    //     let studyLevel = document.getElementById("study_level").value;
+    //     let message = document.getElementById("message").value;
+    //
+    //     // Préparation des données à envoyer
+    //     let formData = {
+    //         name: name,
+    //         email: email,
+    //         phone: phone,
+    //         study_level: studyLevel,
+    //         message: message
+    //     };
+    //     console.log("Données envoyées :", JSON.stringify(formData, null, 2));
+    //
+    //
+    //     // Vérifier si les champs obligatoires sont remplis
+    //     if (!name || !email || !message) {
+    //         // Envoi des données partielles à une feuille Google Sheets séparée (Incomplete Form Submission)
+    //         fetch("https://connect.pabbly.com/workflow/sendwebhookdata/IjU3NjYwNTZkMDYzZTA0MzY1MjZjNTUzYzUxMzUi_pc", {
+    //             method: "POST",
+    //             headers: {
+    //                 "Content-Type": "application/json"
+    //             },
+    //             body: JSON.stringify(formData) // Envoie tous les champs, même vides
+    //         })
+    //             .then(response => response.json())
+    //             .then(data => {
+    //                 console.log("Données partielles envoyées :", data);
+    //                 alert("Formulaire incomplet, données enregistrées.");
+    //             })
+    //             .catch((error) => {
+    //                 console.error("Erreur lors de l'envoi des données partielles :", error);
+    //             });
+    //     } else {
+    //         // Envoi des données complètes à la feuille Google Sheets principale (Form Submission to Google Sheets)
+    //         fetch("https://connect.pabbly.com/workflow/sendwebhookdata/IjU3NjYwNTZkMDYzZTA0MzY1MjZjNTUzNDUxMzUi_pc", {
+    //             method: "POST",
+    //             headers: {
+    //                 "Content-Type": "application/json"
+    //             },
+    //             body: JSON.stringify(formData)
+    //         })
+    //             .then(response => response.json())
+    //             .then(data => {
+    //                 console.log("Success:", data);
+    //                 alert("Message envoyé avec succès !");
+    //                 // Réinitialiser le formulaire après l'envoi réussi
+    //                 document.getElementById("contact").reset();
+    //                 // Effacer les données stockées dans localStorage après soumission réussie
+    //
+    //             })
+    //             .catch((error) => {
+    //                 console.error("Error:", error);
+    //                 alert("Une erreur s'est produite lors de l'envoi.");
+    //             });
+    //     }
+    //
+    // });
+
 
     document.getElementById("contact").addEventListener("submit", function(event) {
         event.preventDefault(); // Empêche l'envoi du formulaire
@@ -497,35 +560,14 @@
             email: email,
             phone: phone,
             study_level: studyLevel,
-            message: message
+            message: message,
+            completed: "Non" // Par défaut, la demande n'est pas complétée
         };
-        console.log("Données envoyées :", JSON.stringify(formData, null, 2));
-
-        // Envoi des données via Fetch API
-        // fetch("https://connect.pabbly.com/workflow/sendwebhookdata/IjU3NjYwNTZkMDYzZTA0MzY1MjZjNTUzNDUxMzUi_pc", {
-        //     method: "POST",
-        //     headers: {
-        //         "Content-Type": "application/json"
-        //     },
-        //     body: JSON.stringify(formData)
-        // })
-        //     .then(response => response.json())
-        //     .then(data => {
-        //         console.log("Success:", data);
-        //         alert("Message envoyé avec succès !");
-        //         // Réinitialiser le formulaire après l'envoi réussi
-        //         document.getElementById("contact").reset();
-        //     })
-        //     .catch((error) => {
-        //         console.error("Error:", error);
-        //         alert("Une erreur s'est produite lors de l'envoi.", );
-        //     });
-
 
         // Vérifier si les champs obligatoires sont remplis
         if (!name || !email || !message) {
-            // Envoi des données partielles à une feuille Google Sheets séparée (Incomplete Form Submission)
-            fetch("https://connect.pabbly.com/workflow/sendwebhookdata/IjU3NjYwNTZkMDYzZTA0MzY1MjZjNTUzYzUxMzUi_pc", {
+            // Envoi des données partielles à une feuille Google Sheets séparée
+            fetch("https://connect.pabbly.com/workflow/sendwebhookdata/YOUR_INCOMPLETE_WEBHOOK_URL", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
@@ -541,30 +583,60 @@
                     console.error("Erreur lors de l'envoi des données partielles :", error);
                 });
         } else {
-            // Envoi des données complètes à la feuille Google Sheets principale (Form Submission to Google Sheets)
-            fetch("https://connect.pabbly.com/workflow/sendwebhookdata/IjU3NjYwNTZkMDYzZTA0MzY1MjZjNTUzNDUxMzUi_pc", {
+            // Vérifier si l'email existe déjà dans Google Sheets des demandes non complétées
+            fetch("https://connect.pabbly.com/workflow/sendwebhookdata/YOUR_SEARCH_WEBHOOK_URL", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
                 },
-                body: JSON.stringify(formData)
+                body: JSON.stringify({ email: email }) // Rechercher l'email
             })
                 .then(response => response.json())
                 .then(data => {
-                    console.log("Success:", data);
-                    alert("Message envoyé avec succès !");
-                    // Réinitialiser le formulaire après l'envoi réussi
-                    document.getElementById("contact").reset();
-                    // Effacer les données stockées dans localStorage après soumission réussie
-
+                    if (data.exists) {
+                        // Mettre à jour le champ "Demande Complétée" à "Oui"
+                        fetch("https://connect.pabbly.com/workflow/sendwebhookdata/YOUR_UPDATE_WEBHOOK_URL", {
+                            method: "POST",
+                            headers: {
+                                "Content-Type": "application/json"
+                            },
+                            body: JSON.stringify({ email: email, completed: "Oui" }) // Mettre à jour la demande
+                        })
+                            .then(response => response.json())
+                            .then(data => {
+                                console.log("Demande mise à jour :", data);
+                            })completed
+                            .catch(error => {
+                                console.error("Erreur lors de la mise à jour :", error);
+                            });
+                    } else {
+                        // Envoi des données complètes à la feuille Google Sheets principale
+                        fetch("https://connect.pabbly.com/workflow/sendwebhookdata/YOUR_COMPLETE_WEBHOOK_URL", {
+                            method: "POST",
+                            headers: {
+                                "Content-Type": "application/json"
+                            },
+                            body: JSON.stringify(formData) // Envoie les données complètes
+                        })
+                            .then(response => response.json())
+                            .then(data => {
+                                console.log("Success:", data);
+                                alert("Message envoyé avec succès !");
+                                document.getElementById("contact").reset(); // Réinitialiser le formulaire
+                            })
+                            .catch((error) => {
+                                console.error("Error:", error);
+                                alert("Une erreur s'est produite lors de l'envoi.");
+                            });
+                    }
                 })
-                .catch((error) => {
-                    console.error("Error:", error);
-                    alert("Une erreur s'est produite lors de l'envoi.");
+                .catch(error => {
+                    console.error("Erreur lors de la recherche :", error);
                 });
         }
-
     });
+
+
 
 </script>
 </body>
